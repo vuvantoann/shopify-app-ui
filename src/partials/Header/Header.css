@@ -1,0 +1,149 @@
+.header {
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  padding: 20px 40px;
+  font-family: sans-serif;
+}
+
+/* ===== Modifier ===== */
+.header--solid {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header--solid .header__nav-link {
+  color: #1a1a1a;
+}
+
+/* ===== Layout ===== */
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+
+.header__logo a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ===== Navigation ===== */
+.header__nav {
+  flex: 1;
+}
+
+.header__nav-list {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__nav-item {
+  position: relative;
+}
+
+.header__nav-item--has-submenu:hover .header__submenu {
+  display: flex;
+}
+
+.header__nav-link {
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+  padding: 5px 0;
+  display: inline-block;
+}
+
+.header__nav-link.active {
+  font-weight: bold;
+  position: relative;
+}
+
+.header__nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #10b981;
+}
+
+.header__nav-link:hover {
+  color: #10b981;
+}
+
+/* ===== Submenu ===== */
+.header__submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  padding: 10px 0;
+  min-width: 160px;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header__submenu-item {
+  list-style: none;
+}
+
+.header__submenu-link {
+  display: block;
+  padding: 8px 16px;
+  color: #1f2937;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.header__submenu-link:hover {
+  color: #10b981;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== Icons ===== */
+.header__icon {
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.header__icon--cart {
+  margin-left: 10px;
+}
+
+.header__icon--cart svg {
+  font-size: 22px;
+}
+
+.header__icon--cart .header__cart-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+}
