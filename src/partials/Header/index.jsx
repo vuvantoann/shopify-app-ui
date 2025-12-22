@@ -1,5 +1,4 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { CiSearch } from 'react-icons/ci'
 
 import './Header.css'
 
@@ -23,9 +22,6 @@ function Header() {
               </NavLink>
             </li>
 
-            {/* <li className="header__icon">
-              <CiSearch />
-            </li> */}
             <li className="header__icon ">Đăng nhập/ Đăng ký</li>
           </ul>
         </nav>

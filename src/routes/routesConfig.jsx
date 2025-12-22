@@ -11,10 +11,6 @@ export const routes = [
     element: <LayoutDefault />,
     children: [
       {
-        path: 'login',
-        element: <Login />,
-      },
-      {
         path: '',
         element: <PrivateRoutes />,
         children: [
@@ -30,7 +26,10 @@ export const routes = [
       },
     ],
   },
-
+  {
+    path: 'login',
+    element: <Login />,
+  },
   {
     path: '*',
     element: <Error404 />,

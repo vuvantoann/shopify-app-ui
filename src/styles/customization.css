@@ -1,0 +1,50 @@
+:root {
+  --box-width: 320px;
+  --box-height: auto;
+
+  --box-border-style: dotted;
+  --box-border-width: 1px;
+  --box-border-color: #000;
+  --box-border-radius: 4px;
+  --box-bg-color: #ffffff;
+
+  --button-width: 120px;
+  --button-height: 36px;
+  --button-bg-color: #2563eb;
+  --button-text-color: #ffffff;
+  --button-border-style: solid;
+  --button-border-width: 1px;
+  --button-border-color: #2563eb;
+
+  --layout-direction: column;
+}
+
+.preview-box {
+  width: var(--box-width);
+  background: var(--box-bg-color);
+  border-style: var(--box-border-style);
+  border-width: var(--box-border-width);
+  border-color: var(--box-border-color);
+  border-radius: var(--box-border-radius);
+  padding: 16px;
+
+  display: flex;
+  flex-direction: var(--layout-direction);
+  gap: 8px;
+}
+
+.preview-input {
+  padding: 8px;
+  flex: 1;
+}
+
+.preview-button {
+  width: var(--button-width);
+  height: var(--button-height);
+  background: var(--button-bg-color);
+  color: var(--button-text-color);
+  border-style: var(--button-border-style);
+  border-width: var(--button-border-width);
+  border-color: var(--button-border-color);
+  cursor: pointer;
+}
