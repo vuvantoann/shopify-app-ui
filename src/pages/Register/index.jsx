@@ -12,24 +12,25 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
-import { loginShop } from '../../services/shopService'
+import { createShop } from '../../services/shopService'
 import { setCookie } from '../../helpers/cookie'
 import { loginSuccess } from '../../store/authSlice'
 
-import './Login.css'
+import '../Login/Login.css'
 
-function LoginShop() {
+function RegisterShop() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [shopifyDomain, setShopifyDomain] = useState('')
+  const [shopOwner, setShopOwner] = useState('')
   const [toast, setToast] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const handleLogin = async () => {
-    if (!shopifyDomain) {
+  const handleRegister = async () => {
+    if (!shopifyDomain || !shopOwner) {
       setToast({
-        content: 'Please enter your Shopify domain',
+        content: 'Please fill in all fields',
         error: true,
       })
       return
@@ -38,18 +39,21 @@ function LoginShop() {
     try {
       setLoading(true)
 
-      const result = await loginShop({
+      const result = await createShop({
         shopify_domain: shopifyDomain,
+        shop_owner: shopOwner,
       })
 
-      if (result.code === 200) {
+      if (result.code === 200 || result.code === 201) {
+        // 🔥 AUTO LOGIN
         setCookie('token', result.token, 1)
         dispatch(loginSuccess())
-        setToast({ content: result.message })
-        navigate('/')
+
+        setToast({ content: result.message || 'Shop created successfully' })
+        navigate('/') // 🔥 về trang chủ luôn
       } else {
         setToast({
-          content: result.message || 'Login failed',
+          content: result.message || 'Register failed',
           error: true,
         })
       }
@@ -67,9 +71,17 @@ function LoginShop() {
   return (
     <Frame>
       <Page>
-        <div className="login">
-          <Card title="Login to your shop" sectioned>
-            <div className="login__form">
+        <div className="register">
+          <Card title="Create your shop" sectioned>
+            <div className="register__form">
+              <TextField
+                label="Shop owner name"
+                placeholder="Your name"
+                value={shopOwner}
+                onChange={setShopOwner}
+                autoComplete="off"
+              />
+
               <TextField
                 label="Shopify domain"
                 placeholder="example.myshopify.com"
@@ -78,16 +90,20 @@ function LoginShop() {
                 autoComplete="off"
               />
 
-              <Button primary fullWidth onClick={handleLogin} loading={loading}>
-                Login
+              <Button
+                primary
+                fullWidth
+                onClick={handleRegister}
+                loading={loading}
+              >
+                Create shop
               </Button>
 
-              {/* 🔥 NEW LINE */}
               <div style={{ marginTop: 16, textAlign: 'center' }}>
                 <Text as="span" tone="subdued">
-                  Don’t have an account?{' '}
+                  Already have an account?{' '}
                 </Text>
-                <Link onClick={() => navigate('/register')}>Create shop</Link>
+                <Link onClick={() => navigate('/login')}>Login</Link>
               </div>
             </div>
           </Card>
@@ -105,4 +121,4 @@ function LoginShop() {
   )
 }
 
-export default LoginShop
+export default RegisterShop

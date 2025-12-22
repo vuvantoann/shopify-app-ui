@@ -1,8 +1,10 @@
-import { Link, NavLink, useLocation } from 'react-router-dom'
-
+import { Link, NavLink } from 'react-router-dom'
 import './Header.css'
+import { getCookie } from '../../helpers/cookie'
 
 function Header() {
+  const token = getCookie('token')
+
   return (
     <header className="header header--solid">
       <div className="header__container">
@@ -21,8 +23,23 @@ function Header() {
                 Translation
               </NavLink>
             </li>
-
-            <li className="header__icon ">Đăng nhập/ Đăng ký</li>
+          </ul>
+          <ul className="header__auth">
+            <li className="header__nav-item ">
+              {token ? (
+                <>
+                  <NavLink to="/logout" className="header__nav-link">
+                    Đăng xuất
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink to="/login" className="header__nav-link">
+                    Đăng nhập/ Đăng ký
+                  </NavLink>
+                </>
+              )}
+            </li>
           </ul>
         </nav>
       </div>

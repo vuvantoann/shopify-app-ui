@@ -3,6 +3,8 @@ import LayoutDefault from '../layout/LayoutDefault'
 import Customization from '../pages/Customization'
 import Error404 from '../pages/Error404'
 import Login from '../pages/Login'
+import Logout from '../pages/Logout'
+import RegisterShop from '../pages/Register'
 import Translation from '../pages/Translation'
 
 export const routes = [
@@ -29,6 +31,14 @@ export const routes = [
   {
     path: 'login',
     element: <Login />,
+  },
+  {
+    path: 'register',
+    element: <RegisterShop />,
+  },
+  {
+    path: 'logout',
+    element: <Logout />,
   },
   {
     path: '*',
