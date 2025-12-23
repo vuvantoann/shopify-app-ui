@@ -29,13 +29,13 @@ function Header() {
               {token ? (
                 <>
                   <NavLink to="/logout" className="header__nav-link">
-                    Đăng xuất
+                    logout
                   </NavLink>
                 </>
               ) : (
                 <>
                   <NavLink to="/login" className="header__nav-link">
-                    Đăng nhập/ Đăng ký
+                    login/sign up
                   </NavLink>
                 </>
               )}
