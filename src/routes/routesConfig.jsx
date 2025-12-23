@@ -6,6 +6,9 @@ import Login from '../pages/Login'
 import Logout from '../pages/Logout'
 import RegisterShop from '../pages/Register'
 import Translation from '../pages/Translation'
+import TranslationCreate from '../pages/Translation/TranslationCreate'
+import TranslationEdit from '../pages/Translation/TranslationEdit'
+import TranslationList from '../pages/Translation/TranslationList'
 
 export const routes = [
   {
@@ -23,6 +26,20 @@ export const routes = [
           {
             path: 'translations',
             element: <Translation />,
+            children: [
+              {
+                index: true,
+                element: <TranslationList />,
+              },
+              {
+                path: 'edit/:locale',
+                element: <TranslationEdit />,
+              },
+              {
+                path: 'create',
+                element: <TranslationCreate />,
+              },
+            ],
           },
         ],
       },

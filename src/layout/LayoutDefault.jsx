@@ -6,13 +6,7 @@ function LayoutDefault() {
   return (
     <>
       <Header />
-      <main
-        className="main"
-        style={{
-          marginTop: '50px',
-          padding: '80px',
-        }}
-      >
+      <main className="main">
         <Outlet />
       </main>
       <Footer />

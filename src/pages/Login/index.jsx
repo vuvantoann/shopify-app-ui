@@ -46,7 +46,7 @@ function LoginShop() {
         setCookie('token', result.token, 1)
         dispatch(loginSuccess())
         setToast({ content: result.message })
-        navigate('/')
+        navigate('/customization')
       } else {
         setToast({
           content: result.message || 'Login failed',

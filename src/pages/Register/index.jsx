@@ -50,7 +50,7 @@ function RegisterShop() {
         dispatch(loginSuccess())
 
         setToast({ content: result.message || 'Shop created successfully' })
-        navigate('/') // 🔥 về trang chủ luôn
+        navigate('/customization') // 🔥 về trang chủ luôn
       } else {
         setToast({
           content: result.message || 'Register failed',
