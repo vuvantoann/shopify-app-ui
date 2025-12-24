@@ -1,5 +1,7 @@
-// pages/Customization/components/ColorPickerField.jsx
+// components/ColorPickerField.jsx
 import { useState } from 'react'
+import { TextField } from '@shopify/polaris'
+import styles from './ColorPickerField.module.css'
 
 function ColorPickerField({ label, color, onChange }) {
   const [showPicker, setShowPicker] = useState(false)
@@ -11,47 +13,45 @@ function ColorPickerField({ label, color, onChange }) {
     onChange(newColor)
   }
 
-  const handleInputChange = (e) => {
-    const newColor = e.target.value
-    setTempColor(newColor)
-    onChange(newColor)
+  const handleInputChange = (value) => {
+    setTempColor(value)
+    onChange(value)
   }
 
   return (
-    <div className="color-picker-wrapper">
-      <div className="color-picker-label">{label}</div>
-      <div className="color-picker-display">
+    <div className={styles.colorPickerWrapper}>
+      <div className={styles.colorPickerLabel}>{label}</div>
+      <div className={styles.colorPickerDisplay}>
         <div
-          className="color-swatch"
+          className={styles.colorSwatch}
           style={{ backgroundColor: color }}
           onClick={() => setShowPicker(!showPicker)}
         />
-        <input
-          type="text"
+        <TextField
           value={color}
           onChange={handleInputChange}
-          className="color-input"
+          autoComplete="off"
         />
       </div>
       {showPicker && (
-        <div className="color-picker-popup">
+        <div className={styles.colorPickerPopup}>
           <div
-            className="color-picker-overlay"
+            className={styles.colorPickerOverlay}
             onClick={() => setShowPicker(false)}
           />
-          <div className="color-picker-content">
+          <div className={styles.colorPickerContent}>
             <input
               type="color"
               value={tempColor}
               onChange={handleColorChange}
-              className="color-picker-native"
+              className={styles.colorPickerNative}
             />
-            <div className="color-picker-hex">
-              <input
-                type="text"
+            <div className={styles.colorPickerHex}>
+              <TextField
                 value={tempColor}
                 onChange={handleInputChange}
-                className="hex-input"
+                autoComplete="off"
+                align="center"
               />
             </div>
           </div>

@@ -6,7 +6,7 @@ import {
   Toast,
   Frame,
   Text,
-  Select,
+  TextField,
   BlockStack,
 } from '@shopify/polaris'
 import { useNavigate } from 'react-router-dom'
@@ -18,24 +18,10 @@ export default function TranslationCreate() {
   const [toast, setToast] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const languageOptions = [
-    { label: 'Select a language', value: '' },
-    { label: 'Vietnamese (vi)', value: 'vi' },
-    { label: 'Spanish (es)', value: 'es' },
-    { label: 'French (fr)', value: 'fr' },
-    { label: 'German (de)', value: 'de' },
-    { label: 'Japanese (ja)', value: 'ja' },
-    { label: 'Korean (ko)', value: 'ko' },
-    { label: 'Chinese (zh)', value: 'zh' },
-    { label: 'Thai (th)', value: 'th' },
-    { label: 'Italian (it)', value: 'it' },
-    { label: 'Portuguese (pt)', value: 'pt' },
-  ]
-
   const handleSubmit = async () => {
     if (!locale) {
       setToast({
-        content: 'Please select a language',
+        content: 'Please enter a language code',
         error: true,
       })
       return
@@ -88,11 +74,13 @@ export default function TranslationCreate() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <Card sectioned>
             <BlockStack gap="400">
-              <Select
-                label="Select language"
-                options={languageOptions}
+              <TextField
+                label="Language code"
+                placeholder="e.g. English"
                 value={locale}
                 onChange={setLocale}
+                autoComplete="off"
+                helpText="Enter a valid locale code (ISO 639-1)"
               />
             </BlockStack>
           </Card>

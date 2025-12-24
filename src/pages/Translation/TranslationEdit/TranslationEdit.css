@@ -1,0 +1,45 @@
+.translation-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Header: Text | Reset to default */
+.translation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e1e3e5;
+}
+
+/* Mỗi dòng label + input */
+.translation-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Cột label bên trái */
+.translation-label {
+  flex: 0 0 260px;
+  font-size: 14px;
+  color: #202223;
+}
+
+/* Cột input bên phải */
+.translation-field {
+  flex: 1;
+}
+
+/* Mobile: tự stack xuống */
+@media (max-width: 768px) {
+  .translation-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .translation-label {
+    flex: none;
+  }
+}

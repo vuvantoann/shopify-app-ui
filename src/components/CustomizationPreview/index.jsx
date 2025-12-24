@@ -1,8 +1,10 @@
-// pages/Customization/components/CustomizationPreview.jsx
+// components/CustomizationPreview.jsx
 import { useSelector } from 'react-redux'
+import styles from './CustomizationPreview.module.css'
 
 function CustomizationPreview() {
   const customization = useSelector((state) => state.customization)
+  const translations = useSelector((state) => state.translation.translations)
 
   const getBorderStyle = (style) => {
     return style.toLowerCase()
@@ -10,92 +12,131 @@ function CustomizationPreview() {
 
   const getButtonClass = () => {
     const variant = customization.button_variant
-    if (variant === 'primary') return 'button-primary'
-    if (variant === 'secondary') return 'button-secondary'
-    if (variant === 'tertiary') return 'button-tertiary'
-    if (variant === 'monochromePlain') return 'button-monochrome'
-    return 'button-plain'
+    if (variant === 'primary') return styles.buttonPrimary
+    if (variant === 'secondary') return styles.buttonSecondary
+    if (variant === 'tertiary') return styles.buttonTertiary
+    if (variant === 'monochromePlain') return styles.buttonMonochrome
+    return styles.buttonPlain
   }
 
   return (
-    <div className="customization-preview">
-      <div className="preview-header">
+    <div className={styles.customizationPreview}>
+      <div className={styles.previewHeader}>
         <span>Your cart</span>
-        <div className="preview-actions">
-          <button className="icon-btn">⊞</button>
-          <button className="icon-btn">□</button>
+        <div className={styles.previewActions}>
+          <button className={styles.iconBtn}>⊞</button>
+          <button className={styles.iconBtn}>□</button>
         </div>
       </div>
 
-      <div className="preview-content">
-        <div className="cart-items">
-          <div className="skeleton-item">
-            <div className="skeleton-image"></div>
-            <div className="skeleton-details">
-              <div className="skeleton-line long"></div>
-              <div className="skeleton-line short"></div>
+      <div className={styles.previewContent}>
+        <div className={styles.cartItems}>
+          <div className={styles.skeletonItem}>
+            <div className={styles.skeletonImage}></div>
+            <div className={styles.skeletonDetails}>
+              <div className={`${styles.skeletonLine} ${styles.long}`}></div>
+              <div className={`${styles.skeletonLine} ${styles.short}`}></div>
             </div>
           </div>
-          <div className="skeleton-item">
-            <div className="skeleton-image"></div>
-            <div className="skeleton-details">
-              <div className="skeleton-line long"></div>
-              <div className="skeleton-line short"></div>
+          <div className={styles.skeletonItem}>
+            <div className={styles.skeletonImage}></div>
+            <div className={styles.skeletonDetails}>
+              <div className={`${styles.skeletonLine} ${styles.long}`}></div>
+              <div className={`${styles.skeletonLine} ${styles.short}`}></div>
             </div>
           </div>
         </div>
 
-        <div className="discount-section">
-          <label className="discount-label">Label</label>
-          <div
-            className={`discount-input-wrapper ${
-              customization.direction === 'horizontal'
-                ? 'layout-horizontal'
-                : ''
-            }`}
-            style={{
-              width:
-                customization.direction === 'horizontal'
-                  ? '100%'
-                  : `${customization.input_width}%`,
-              minHeight: `${customization.input_height}px`,
-              backgroundColor: customization.input_background_color,
-              border: `2px ${getBorderStyle(customization.input_border)} ${
-                customization.border_color
-              }`,
-              borderRadius: `${customization.input_border_radius}px`,
-            }}
-          >
-            <input
-              type="text"
-              className="discount-input"
-              style={{
-                color: customization.button_text_color,
-              }}
-              placeholder="Enter discount code"
-            />
-            <button
-              className={`apply-button ${getButtonClass()}`}
-              style={{
-                width:
-                  customization.direction === 'horizontal'
-                    ? `${customization.button_width}%`
-                    : '100%',
-                height: `${customization.button_height}px`,
-                backgroundColor: customization.button_background_color,
-                color: customization.button_text_color,
-                border: `${customization.border_width}px ${getBorderStyle(
-                  customization.button_border
-                )} ${customization.border_color}`,
-              }}
-            >
-              Label
-            </button>
-          </div>
+        <div className={styles.discountSection}>
+          {/* <label className={styles.discountLabel}>Label</label> */}
+
+          {customization.direction === 'horizontal' ? (
+            // Layout Horizontal
+            <div className={styles.layoutHorizontal}>
+              <input
+                type="text"
+                className={styles.discountInput}
+                placeholder={
+                  translations['Discount box placeholder text'] ||
+                  'Discount code'
+                }
+                style={{
+                  flex: `0 0 ${100 - customization.button_width}%`,
+                  height: `${customization.input_height}px`,
+                  backgroundColor: customization.input_background_color,
+                  color: customization.input_text_color,
+                  border: `${
+                    customization.input_border_width
+                  }px ${getBorderStyle(customization.input_border)} ${
+                    customization.input_border_color
+                  }`,
+                  borderRadius: `${customization.input_border_radius}px`,
+                }}
+              />
+              <button
+                className={`${styles.applyButton} ${getButtonClass()}`}
+                style={{
+                  flex: `0 0 ${customization.button_width}%`,
+                  height: `${customization.button_height}px`,
+                  backgroundColor: customization.button_background_color,
+                  color: customization.button_text_color,
+                  border: `${
+                    customization.button_border_width
+                  }px ${getBorderStyle(customization.button_border)} ${
+                    customization.button_border_color
+                  }`,
+                  borderRadius: `${customization.button_border_radius}px`,
+                }}
+              >
+                {translations['Button text'] || 'Apply'}
+              </button>
+            </div>
+          ) : (
+            // Layout Vertical
+            <div className={styles.layoutVertical}>
+              <input
+                type="text"
+                className={styles.discountInput}
+                placeholder={
+                  translations['Discount box placeholder text'] ||
+                  'Discount code'
+                }
+                style={{
+                  width: `${customization.input_width}%`,
+                  height: `${customization.input_height}px`,
+                  backgroundColor: customization.input_background_color,
+                  color: customization.input_text_color,
+                  border: `${
+                    customization.input_border_width
+                  }px ${getBorderStyle(customization.input_border)} ${
+                    customization.input_border_color
+                  }`,
+                  borderRadius: `${customization.input_border_radius}px`,
+                }}
+              />
+              <button
+                className={`${styles.applyButton} ${getButtonClass()}`}
+                style={{
+                  width: `${customization.input_width}%`,
+                  height: `${customization.button_height}px`,
+                  backgroundColor: customization.button_background_color,
+                  color: customization.button_text_color,
+                  border: `${
+                    customization.button_border_width
+                  }px ${getBorderStyle(customization.button_border)} ${
+                    customization.button_border_color
+                  }`,
+                  borderRadius: `${customization.button_border_radius}px`,
+                }}
+              >
+                {translations['Button text'] || 'Apply'}
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="cart-total">
-          <div className="skeleton-line medium"></div>
+        <div className={styles.cartTotal}>
+          <div className={`${styles.skeletonLine} ${styles.medium}`}></div>
         </div>
       </div>
 

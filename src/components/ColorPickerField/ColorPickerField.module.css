@@ -1,0 +1,79 @@
+/* components/ColorPickerField.module.css */
+
+.colorPickerWrapper {
+  position: relative;
+}
+
+.colorPickerLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #202223;
+  margin-bottom: 6px;
+}
+
+.colorPickerDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.colorSwatch {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #c9cccf;
+  border-radius: 50%; /* Chuyển thành hình tròn */
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.colorSwatch:hover {
+  border-color: #005bd3;
+  transform: scale(1.05);
+}
+
+/* Xóa ô vuông nhỏ màu đen */
+.colorSwatchSmall {
+  display: none;
+}
+
+.colorPickerPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+.colorPickerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.colorPickerContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+}
+
+.colorPickerNative {
+  width: 200px;
+  height: 200px;
+  border: none;
+  cursor: pointer;
+}
+
+.colorPickerHex {
+  margin-top: 12px;
+}

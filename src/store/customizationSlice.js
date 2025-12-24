@@ -5,22 +5,26 @@ const initialState = {
   // Input styles
   input_width: 25,
   input_height: 25,
-  input_border: 'dotted',
-  input_border_radius: 1,
+  input_border: 'solid',
+  input_border_radius: 4,
+  input_border_width: 2,
+  input_border_color: '#c9cccf',
   input_background_color: '#FFFFFF',
+  input_text_color: '#000000',
 
   // Button styles
-  button_variant: 'plain',
+  button_variant: 'primary',
   button_width: 25,
-  button_height: 25,
-  button_border: 'dotted',
-  button_background_color: '#000000',
+  button_height: 40,
+  button_border: 'solid',
+  button_border_radius: 4,
+  button_border_width: 1,
+  button_border_color: '#000000',
+  button_background_color: '#008060',
   button_text_color: '#FFFFFF',
-  border_width: 1,
-  border_color: '#000000',
 
   // Layout
-  direction: 'vertical',
+  direction: 'horizontal',
 
   // Custom CSS
   css: '',

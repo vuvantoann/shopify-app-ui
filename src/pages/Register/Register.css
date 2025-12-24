@@ -1,17 +1,19 @@
-.login {
+/* RegisterShop.css */
+
+.register {
   max-width: 800px;
   margin: 0 auto;
 }
 
 /* Form container: stack elements vertically with gap */
-.login__form {
+.register__form {
   display: flex;
   flex-direction: column;
   gap: 24px; /* Similar gap to translation-row */
 }
 
 /* Optional: Style for the card title if needed, but Polaris handles it */
-.login__form .Polaris-Card__Header {
+.register__form .Polaris-Card__Header {
   /* You can add custom styles here if desired, e.g., border-bottom like translation-header */
   padding-bottom: 12px;
   border-bottom: 1px solid #e1e3e5;
@@ -19,7 +21,7 @@
 
 /* Mobile responsiveness: stack form elements if needed, but since it's already column, maybe adjust gaps */
 @media (max-width: 768px) {
-  .login__form {
+  .register__form {
     gap: 16px; /* Smaller gap on mobile */
   }
 }

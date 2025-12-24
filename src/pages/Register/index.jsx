@@ -15,9 +15,7 @@ import { useDispatch } from 'react-redux'
 import { createShop } from '../../services/shopService'
 import { setCookie } from '../../helpers/cookie'
 import { loginSuccess } from '../../store/authSlice'
-
-import '../Login/Login.css'
-
+import './Register.css'
 function RegisterShop() {
   const navigate = useNavigate()
   const dispatch = useDispatch()

@@ -1,111 +1,142 @@
 // pages/Customization/Customization.jsx
 import { useEffect, useState } from 'react'
-import { Page, Frame, Toast } from '@shopify/polaris'
 import { useDispatch, useSelector } from 'react-redux'
+import { Notyf } from 'notyf'
+import 'notyf/notyf.min.css'
 import {
   loadCustomization,
   setLoading,
   setError,
   clearChanges,
 } from '../../store/customizationSlice'
+import { setLocale, setTranslations } from '../../store/translationSlice'
+import { getTranslations } from '../../services/translationSevice'
 
-import './Customization.css'
+import styles from './Customization.module.css'
+import CustomizationPreview from '../../components/CustomizationPreview'
+import CustomizationSidebar from '../../components/CustomizationSidebar'
 import {
   getCustomization,
   saveCustomization,
 } from '../../services/customizationSevice'
-import CustomizationSidebar from '../../components/CustomizationSidebar'
-import CustomizationPreview from '../../components/CustomizationPreview'
 
 function Customization() {
   const dispatch = useDispatch()
   const customization = useSelector((state) => state.customization)
-  const [toast, setToast] = useState(null)
+  const currentLocale = useSelector((state) => state.translation.currentLocale)
   const [saving, setSaving] = useState(false)
+  const [availableLocales, setAvailableLocales] = useState([])
 
-  // Load customization khi component mount
   useEffect(() => {
-    const fetchCustomization = async () => {
+    const fetchData = async () => {
       try {
         dispatch(setLoading(true))
-        const result = await getCustomization()
 
-        if (result.code === 200 && result.data) {
-          dispatch(loadCustomization(result.data))
+        // Load customization
+        const customResult = await getCustomization()
+        if (customResult.code === 200 && customResult.data) {
+          dispatch(loadCustomization(customResult.data))
+        }
+
+        // Load translations
+        const transResult = await getTranslations()
+        if (transResult.code === 200 && transResult.data) {
+          setAvailableLocales(transResult.data.map((t) => t.locale))
+
+          // Load translation cho locale hiện tại
+          const currentTrans = transResult.data.find(
+            (t) => t.locale === currentLocale
+          )
+          if (currentTrans) {
+            dispatch(setTranslations(currentTrans.translate))
+          }
         }
       } catch (error) {
-        console.error('Error loading customization:', error)
-        dispatch(setError('Failed to load customization'))
+        console.error('Error loading data:', error)
+        dispatch(setError('Failed to load data'))
       } finally {
         dispatch(setLoading(false))
       }
     }
 
-    fetchCustomization()
-  }, [dispatch])
+    fetchData()
+  }, [dispatch, currentLocale])
 
-  // Handle save
+  const handleLocaleChange = async (newLocale) => {
+    try {
+      const result = await getTranslations()
+      if (result.code === 200) {
+        const translation = result.data.find((t) => t.locale === newLocale)
+        if (translation) {
+          dispatch(setLocale(newLocale))
+          dispatch(setTranslations(translation.translate))
+        }
+      }
+    } catch (error) {
+      console.error('Error loading translation:', error)
+    }
+  }
+
   const handleSave = async () => {
     try {
       setSaving(true)
 
-      // Lấy data từ Redux state (bỏ các field UI)
       const { loading, error, hasChanges, ...customizationData } = customization
 
       const result = await saveCustomization(customizationData)
 
+      const notyf = new Notyf({
+        duration: 2000,
+        position: { x: 'right', y: 'top' },
+      })
+
       if (result.code === 200) {
         dispatch(clearChanges())
-        setToast({
-          content: result.message || 'Customization saved successfully!',
-          error: false,
-        })
+        notyf.success(result.message || 'Customization saved successfully!')
       } else {
-        setToast({
-          content: result.message || 'Failed to save customization',
-          error: true,
-        })
+        notyf.error(result.message || 'Failed to save customization')
       }
     } catch (error) {
       console.error('Error saving customization:', error)
-      setToast({
-        content: 'Something went wrong, please try again',
-        error: true,
+      const notyf = new Notyf({
+        duration: 2000,
+        position: { x: 'right', y: 'top' },
       })
+      notyf.error('Something went wrong, please try again')
     } finally {
       setSaving(false)
     }
   }
 
   return (
-    <Frame>
-      <Page>
-        <div className="customization-container">
-          <div className="customization-header">
-            <button
-              className="save-button"
-              onClick={handleSave}
-              disabled={saving || !customization.hasChanges}
-            >
-              {saving ? 'Saving...' : 'Save'}
-            </button>
-          </div>
+    <div className={styles.customizationContainer}>
+      <div className={styles.customizationHeader}>
+        <select
+          value={currentLocale}
+          onChange={(e) => handleLocaleChange(e.target.value)}
+          className={styles.localeSelect}
+        >
+          {availableLocales.map((locale) => (
+            <option key={locale} value={locale}>
+              {locale}
+            </option>
+          ))}
+        </select>
 
-          <div className="customization-content">
-            <CustomizationSidebar />
-            <CustomizationPreview />
-          </div>
-        </div>
-      </Page>
+        <button
+          className={styles.saveButton}
+          onClick={handleSave}
+          disabled={saving || !customization.hasChanges}
+        >
+          {saving ? 'Saving...' : 'Save'}
+        </button>
+      </div>
 
-      {toast && (
-        <Toast
-          content={toast.content}
-          error={toast.error}
-          onDismiss={() => setToast(null)}
-        />
-      )}
-    </Frame>
+      <div className={styles.customizationContent}>
+        <CustomizationSidebar />
+        <CustomizationPreview />
+      </div>
+    </div>
   )
 }
 

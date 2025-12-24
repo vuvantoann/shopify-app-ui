@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import {
   Page,
   Card,
-  Button,
   Toast,
   Frame,
   TextField,
@@ -16,13 +15,16 @@ import {
   getTranslations,
   updateTranslation,
 } from '../../../services/translationSevice'
+import './TranslationEdit.css'
 
 export default function TranslationEdit() {
   const navigate = useNavigate()
   const { locale } = useParams()
+
   const [toast, setToast] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+
   const [translations, setTranslations] = useState({
     'Discount box placeholder text': '',
     'Button text': '',
@@ -43,10 +45,7 @@ export default function TranslationEdit() {
         if (translation) {
           setTranslations(translation.translate || {})
         } else {
-          setToast({
-            content: 'Translation not found',
-            error: true,
-          })
+          setToast({ content: 'Translation not found', error: true })
           navigate('/translations')
         }
       } else {
@@ -56,7 +55,7 @@ export default function TranslationEdit() {
         })
       }
     } catch (error) {
-      console.error('Error loading translation:', error)
+      console.error(error)
       setToast({
         content: 'Something went wrong, please try again',
         error: true,
@@ -67,28 +66,23 @@ export default function TranslationEdit() {
   }
 
   const handleChange = (key, value) => {
-    setTranslations({
-      ...translations,
+    setTranslations((prev) => ({
+      ...prev,
       [key]: value,
-    })
+    }))
   }
 
   const handleSubmit = async () => {
     try {
       setSaving(true)
-
       const result = await updateTranslation({
         locale,
         translate: translations,
       })
 
       if (result.code === 200) {
-        setToast({
-          content: result.message || 'Translation updated successfully',
-        })
-        setTimeout(() => {
-          navigate('/translations')
-        }, 1000)
+        setToast({ content: 'Translation updated successfully' })
+        setTimeout(() => navigate('/translations'), 1000)
       } else {
         setToast({
           content: result.message || 'Failed to update translation',
@@ -96,7 +90,7 @@ export default function TranslationEdit() {
         })
       }
     } catch (error) {
-      console.error('Error updating translation:', error)
+      console.error(error)
       setToast({
         content: 'Something went wrong, please try again',
         error: true,
@@ -111,9 +105,7 @@ export default function TranslationEdit() {
       'Discount box placeholder text': 'Discount code',
       'Button text': 'Apply',
     })
-    setToast({
-      content: 'Reset to default values',
-    })
+    setToast({ content: 'Reset to default values' })
   }
 
   if (loading) {
@@ -143,33 +135,44 @@ export default function TranslationEdit() {
           loading: saving,
         }}
       >
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div className="translation-container">
           <Card sectioned>
             <BlockStack gap="400">
-              <div>
+              {/* ===== HEADER ===== */}
+              <div className="translation-header">
                 <Text variant="headingMd" as="h2">
                   Text
                 </Text>
-                <div style={{ marginTop: '8px' }}>
-                  <Link onClick={handleResetToDefault}>Reset to default</Link>
+                <Link onClick={handleResetToDefault}>Reset to default</Link>
+              </div>
+
+              {/* ===== ROW 1 ===== */}
+              <div className="translation-row">
+                <div className="translation-label">
+                  Discount box placeholder text
+                </div>
+                <div className="translation-field">
+                  <TextField
+                    value={translations['Discount box placeholder text'] || ''}
+                    onChange={(value) =>
+                      handleChange('Discount box placeholder text', value)
+                    }
+                    autoComplete="off"
+                  />
                 </div>
               </div>
 
-              <TextField
-                label="Discount box placeholder text"
-                value={translations['Discount box placeholder text'] || ''}
-                onChange={(value) =>
-                  handleChange('Discount box placeholder text', value)
-                }
-                autoComplete="off"
-              />
-
-              <TextField
-                label="Button text"
-                value={translations['Button text'] || ''}
-                onChange={(value) => handleChange('Button text', value)}
-                autoComplete="off"
-              />
+              {/* ===== ROW 2 ===== */}
+              <div className="translation-row">
+                <div className="translation-label">Button text</div>
+                <div className="translation-field">
+                  <TextField
+                    value={translations['Button text'] || ''}
+                    onChange={(value) => handleChange('Button text', value)}
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
             </BlockStack>
           </Card>
         </div>

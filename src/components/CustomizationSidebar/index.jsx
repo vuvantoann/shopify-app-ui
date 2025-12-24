@@ -1,18 +1,26 @@
-// pages/Customization/components/CustomizationSidebar.jsx
+// Customization/CustomizationSidebar.jsx
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  TextField,
+  Select,
+  RangeSlider,
+  RadioButton,
+  BlockStack,
+} from '@shopify/polaris'
 
-import { updateField } from '../../store/customizationSlice'
+import styles from './CustomizationSidebar.module.css'
 import ColorPickerField from '../ColorPickerField'
+import { updateField } from '@/store/customizationSlice'
 
 function CustomizationSidebar() {
   const dispatch = useDispatch()
   const customization = useSelector((state) => state.customization)
 
   const [expandedSections, setExpandedSections] = useState({
-    boxSize: true,
-    boxBorder: true,
-    boxColor: true,
+    inputSize: true,
+    inputBorder: true,
+    inputColor: true,
     button: true,
     layout: true,
     css: true,
@@ -30,16 +38,15 @@ function CustomizationSidebar() {
   }
 
   const borderStyleOptions = [
+    { label: 'Solid', value: 'solid' },
     { label: 'Dotted', value: 'dotted' },
     { label: 'Dashed', value: 'dashed' },
-    { label: 'Solid', value: 'solid' },
     { label: 'Double', value: 'double' },
     { label: 'Groove', value: 'groove' },
     { label: 'Ridge', value: 'ridge' },
     { label: 'Inset', value: 'inset' },
     { label: 'Outset', value: 'outset' },
     { label: 'None', value: 'none' },
-    { label: 'Hidden', value: 'hidden' },
   ]
 
   const buttonVariantOptions = [
@@ -51,173 +58,164 @@ function CustomizationSidebar() {
   ]
 
   return (
-    <div className="customization-sidebar">
-      {/* Discount box size */}
-      <div className="sidebar-section">
+    <div className={styles.customizationSidebar}>
+      {/* Input box size */}
+      <div className={styles.sidebarSection}>
         <div
-          className="section-header"
-          onClick={() => toggleSection('boxSize')}
+          className={styles.sectionHeader}
+          onClick={() => toggleSection('inputSize')}
         >
-          <span>Discount box size</span>
-          <span className="collapse-icon">
-            {expandedSections.boxSize ? '−' : '+'}
+          <span>Input box size</span>
+          <span className={styles.collapseIcon}>
+            {expandedSections.inputSize ? '−' : '+'}
           </span>
         </div>
-        {expandedSections.boxSize && (
-          <div className="section-content">
-            <div className="input-group">
-              <div className="input-field">
-                <label>Box width</label>
-                <input
-                  type="number"
-                  value={customization.input_width}
-                  onChange={(e) =>
-                    handleChange('input_width', Number(e.target.value))
-                  }
-                />
-              </div>
-              <div className="input-field">
-                <label>Box height</label>
-                <input
-                  type="number"
-                  value={customization.input_height}
-                  onChange={(e) =>
-                    handleChange('input_height', Number(e.target.value))
-                  }
-                />
-              </div>
+        {expandedSections.inputSize && (
+          <div className={styles.sectionContent}>
+            <div className={styles.inputGroup}>
+              <TextField
+                label="Input width"
+                type="number"
+                value={String(customization.input_width)}
+                onChange={(value) => handleChange('input_width', Number(value))}
+                autoComplete="off"
+              />
+              <TextField
+                label="Input height"
+                type="number"
+                value={String(customization.input_height)}
+                onChange={(value) =>
+                  handleChange('input_height', Number(value))
+                }
+                autoComplete="off"
+              />
             </div>
           </div>
         )}
       </div>
 
-      {/* Discount box border */}
-      <div className="sidebar-section">
+      {/* Input box border */}
+      <div className={styles.sidebarSection}>
         <div
-          className="section-header"
-          onClick={() => toggleSection('boxBorder')}
+          className={styles.sectionHeader}
+          onClick={() => toggleSection('inputBorder')}
         >
-          <span>Discount box border</span>
-          <span className="collapse-icon">
-            {expandedSections.boxBorder ? '−' : '+'}
+          <span>Input box border</span>
+          <span className={styles.collapseIcon}>
+            {expandedSections.inputBorder ? '−' : '+'}
           </span>
         </div>
-        {expandedSections.boxBorder && (
-          <div className="section-content">
-            <ColorPickerField
-              label="Border color"
-              color={customization.border_color}
-              onChange={(color) => handleChange('border_color', color)}
+        {expandedSections.inputBorder && (
+          <div className={styles.sectionContent}>
+            <Select
+              label="Border style"
+              options={borderStyleOptions}
+              value={customization.input_border}
+              onChange={(value) => handleChange('input_border', value)}
             />
 
-            <div className="select-field">
-              <label>Border style</label>
-              <select
-                value={customization.input_border}
-                onChange={(e) => handleChange('input_border', e.target.value)}
-              >
-                {borderStyleOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <RangeSlider
+              label="Border width"
+              value={customization.input_border_width}
+              onChange={(value) => handleChange('input_border_width', value)}
+              min={0}
+              max={10}
+              output
+              suffix={<span>{customization.input_border_width}px</span>}
+            />
 
-            <div className="range-field">
-              <label>Border radius</label>
-              <div className="range-wrapper">
-                <input
-                  type="range"
-                  min="0"
-                  max="50"
-                  value={customization.input_border_radius}
-                  onChange={(e) =>
-                    handleChange('input_border_radius', Number(e.target.value))
-                  }
-                />
-                <span className="range-value">
-                  {customization.input_border_radius}px
-                </span>
-              </div>
-            </div>
+            <ColorPickerField
+              label="Border color"
+              color={customization.input_border_color}
+              onChange={(color) => handleChange('input_border_color', color)}
+            />
+
+            <RangeSlider
+              label="Border radius"
+              value={customization.input_border_radius}
+              onChange={(value) => handleChange('input_border_radius', value)}
+              min={0}
+              max={50}
+              output
+              suffix={<span>{customization.input_border_radius}px</span>}
+            />
           </div>
         )}
       </div>
 
-      {/* Discount box color */}
-      <div className="sidebar-section">
+      {/* Input box color */}
+      <div className={styles.sidebarSection}>
         <div
-          className="section-header"
-          onClick={() => toggleSection('boxColor')}
+          className={styles.sectionHeader}
+          onClick={() => toggleSection('inputColor')}
         >
-          <span>Discount box color</span>
-          <span className="collapse-icon">
-            {expandedSections.boxColor ? '−' : '+'}
+          <span>Input box color</span>
+          <span className={styles.collapseIcon}>
+            {expandedSections.inputColor ? '−' : '+'}
           </span>
         </div>
-        {expandedSections.boxColor && (
-          <div className="section-content">
+        {expandedSections.inputColor && (
+          <div className={styles.sectionContent}>
             <ColorPickerField
-              label="Discount box color"
+              label="Background color"
               color={customization.input_background_color}
               onChange={(color) =>
                 handleChange('input_background_color', color)
               }
+            />
+
+            <ColorPickerField
+              label="Text color"
+              color={customization.input_text_color}
+              onChange={(color) => handleChange('input_text_color', color)}
             />
           </div>
         )}
       </div>
 
       {/* Button */}
-      <div className="sidebar-section">
-        <div className="section-header" onClick={() => toggleSection('button')}>
+      <div className={styles.sidebarSection}>
+        <div
+          className={styles.sectionHeader}
+          onClick={() => toggleSection('button')}
+        >
           <span>Button</span>
-          <span className="collapse-icon">
+          <span className={styles.collapseIcon}>
             {expandedSections.button ? '−' : '+'}
           </span>
         </div>
         {expandedSections.button && (
-          <div className="section-content">
-            <div className="select-field">
-              <label>Button type</label>
-              <select
-                value={customization.button_variant}
-                onChange={(e) => handleChange('button_variant', e.target.value)}
-              >
-                {buttonVariantOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className={styles.sectionContent}>
+            <Select
+              label="Button type"
+              options={buttonVariantOptions}
+              value={customization.button_variant}
+              onChange={(value) => handleChange('button_variant', value)}
+            />
 
-            <div className="input-group">
-              <div className="input-field">
-                <label>Button width</label>
-                <input
-                  type="number"
-                  value={customization.button_width}
-                  onChange={(e) =>
-                    handleChange('button_width', Number(e.target.value))
-                  }
-                />
-              </div>
-              <div className="input-field">
-                <label>Button height</label>
-                <input
-                  type="number"
-                  value={customization.button_height}
-                  onChange={(e) =>
-                    handleChange('button_height', Number(e.target.value))
-                  }
-                />
-              </div>
+            <div className={styles.inputGroup}>
+              <TextField
+                label="Button width"
+                type="number"
+                value={String(customization.button_width)}
+                onChange={(value) =>
+                  handleChange('button_width', Number(value))
+                }
+                autoComplete="off"
+              />
+              <TextField
+                label="Button height"
+                type="number"
+                value={String(customization.button_height)}
+                onChange={(value) =>
+                  handleChange('button_height', Number(value))
+                }
+                autoComplete="off"
+              />
             </div>
 
             <ColorPickerField
-              label="Button color"
+              label="Button background"
               color={customization.button_background_color}
               onChange={(color) =>
                 handleChange('button_background_color', color)
@@ -225,102 +223,98 @@ function CustomizationSidebar() {
             />
 
             <ColorPickerField
-              label="Text color"
+              label="Button text color"
               color={customization.button_text_color}
               onChange={(color) => handleChange('button_text_color', color)}
             />
 
-            <div className="select-field">
-              <label>Border style</label>
-              <select
-                value={customization.button_border}
-                onChange={(e) => handleChange('button_border', e.target.value)}
-              >
-                {borderStyleOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="Border style"
+              options={borderStyleOptions}
+              value={customization.button_border}
+              onChange={(value) => handleChange('button_border', value)}
+            />
 
-            <div className="range-field">
-              <label>Border width</label>
-              <div className="range-wrapper">
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  value={customization.border_width}
-                  onChange={(e) =>
-                    handleChange('border_width', Number(e.target.value))
-                  }
-                />
-                <span className="range-value">
-                  {customization.border_width}px
-                </span>
-              </div>
-            </div>
+            <RangeSlider
+              label="Border width"
+              value={customization.button_border_width}
+              onChange={(value) => handleChange('button_border_width', value)}
+              min={0}
+              max={10}
+              output
+              suffix={<span>{customization.button_border_width}px</span>}
+            />
 
             <ColorPickerField
               label="Border color"
-              color={customization.border_color}
-              onChange={(color) => handleChange('border_color', color)}
+              color={customization.button_border_color}
+              onChange={(color) => handleChange('button_border_color', color)}
+            />
+
+            <RangeSlider
+              label="Border radius"
+              value={customization.button_border_radius}
+              onChange={(value) => handleChange('button_border_radius', value)}
+              min={0}
+              max={50}
+              output
+              suffix={<span>{customization.button_border_radius}px</span>}
             />
           </div>
         )}
       </div>
 
       {/* Layout */}
-      <div className="sidebar-section">
-        <div className="section-header" onClick={() => toggleSection('layout')}>
+      <div className={styles.sidebarSection}>
+        <div
+          className={styles.sectionHeader}
+          onClick={() => toggleSection('layout')}
+        >
           <span>Layout</span>
-          <span className="collapse-icon">
+          <span className={styles.collapseIcon}>
             {expandedSections.layout ? '−' : '+'}
           </span>
         </div>
         {expandedSections.layout && (
-          <div className="section-content">
-            <div className="radio-group">
-              <label className="radio-option">
-                <input
-                  type="radio"
-                  value="vertical"
-                  checked={customization.direction === 'vertical'}
-                  onChange={(e) => handleChange('direction', e.target.value)}
-                />
-                <span>Vertical</span>
-              </label>
-              <label className="radio-option">
-                <input
-                  type="radio"
-                  value="horizontal"
-                  checked={customization.direction === 'horizontal'}
-                  onChange={(e) => handleChange('direction', e.target.value)}
-                />
-                <span>Horizontal</span>
-              </label>
-            </div>
+          <div className={styles.sectionContent}>
+            <BlockStack gap="200">
+              <RadioButton
+                label="Vertical"
+                checked={customization.direction === 'vertical'}
+                id="vertical"
+                onChange={() => handleChange('direction', 'vertical')}
+              />
+              <RadioButton
+                label="Horizontal"
+                checked={customization.direction === 'horizontal'}
+                id="horizontal"
+                onChange={() => handleChange('direction', 'horizontal')}
+              />
+            </BlockStack>
           </div>
         )}
       </div>
 
       {/* Custom CSS */}
-      <div className="sidebar-section">
-        <div className="section-header" onClick={() => toggleSection('css')}>
+      <div className={styles.sidebarSection}>
+        <div
+          className={styles.sectionHeader}
+          onClick={() => toggleSection('css')}
+        >
           <span>Custom CSS</span>
-          <span className="collapse-icon">
+          <span className={styles.collapseIcon}>
             {expandedSections.css ? '−' : '+'}
           </span>
         </div>
         {expandedSections.css && (
-          <div className="section-content">
-            <textarea
-              className="custom-css-input"
-              placeholder="Enter your custom CSS here..."
+          <div className={styles.sectionContent}>
+            <TextField
+              label=""
               value={customization.css}
-              onChange={(e) => handleChange('css', e.target.value)}
-              rows="6"
+              onChange={(value) => handleChange('css', value)}
+              multiline={6}
+              placeholder="Enter your custom CSS here..."
+              autoComplete="off"
             />
           </div>
         )}
